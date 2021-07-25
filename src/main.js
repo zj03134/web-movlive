@@ -22,11 +22,19 @@ import {
   PullRefresh,
   Notify,
   Toast,
-  ActionSheet
+  ActionSheet,
+  Popup,
+  Col,
+  Row,
+  Badge
 } from 'vant'
+Vue.use(Col)
+Vue.use(Badge)
+Vue.use(Row)
 Vue.use(ActionSheet)
 Vue.use(PullRefresh)
 Vue.use(Toast)
+Vue.use(Popup)
 // 全局注册
 Vue.use(Notify)
 Vue.use(Cell)

@@ -4,7 +4,7 @@
     <van-pull-refresh v-model="isLoading" @refresh="pullDownRefreshFn">
       <!-- 底部加载更多 -->
       <van-list v-model="loading" :finished="down" finished-text="没有更多了" @load="onLoad">
-        <Articleltem v-for="item in articleList" :key="item.art_id" :obj="item"></Articleltem>
+        <Articleltem v-for="item in articleList" :key="item.art_id" :obj="item" @dislike="dislikeFn"></Articleltem>
       </van-list>
     </van-pull-refresh>
   </div>
@@ -12,13 +12,15 @@
 
 <script>
 import Articleltem from './components/ArticleItem'
-import { articleListAPI } from '@/api/index.js'
+import { articleListAPI, articleDisLikeAPI } from '@/api/index.js'
 // 导入时间格式化后的js文件
 import { timeAgo } from '@/utils/data.js'
-import { Toast } from 'vant'
+import { Notify, Toast } from 'vant'
+
 export default {
   data() {
     return {
+      // 文章列表
       articleList: [],
       // 底部加载状态
       loading: false,
@@ -90,6 +92,18 @@ export default {
         // 赋值最新的数据
         this.articleList = results
         this.isLoading = false
+      }
+    },
+
+    // 反馈(不感兴趣)
+    async dislikeFn(obj) {
+      try {
+        await articleDisLikeAPI({
+          target: obj.art_id
+        })
+        Notify({ type: 'success', message: '反馈成功' })
+      } catch (err) {
+        Notify({ type: 'warning', message: '反馈失败-联系程序员' })
       }
     }
   },

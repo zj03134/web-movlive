@@ -25,9 +25,30 @@ const articleListAPI = ({
     }
   })
 }
-
+// 文章-不感兴趣
+const articleDisLikeAPI = ({
+  artId
+}) => {
+  // 这里必须return,否则就是undefined，就拿不到数据了
+  return request({
+    method: 'POST',
+    url: '/v1_0/article/dislikes',
+    data: {
+      target: artId
+    },
+    isAuth: false
+  })
+}
+// 首页 - 获取 所有频道
+const allChannelListAPI = () => {
+  return request({
+    url: '/v1_0/channels'
+  })
+}
 // 按需导出
 export {
   userChaneListAPI,
-  articleListAPI
+  articleListAPI,
+  articleDisLikeAPI,
+  allChannelListAPI
 }

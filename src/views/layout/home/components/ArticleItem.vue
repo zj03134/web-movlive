@@ -25,16 +25,35 @@
             <span>{{ obj.pubdate }}</span>
           </div>
           <!-- 反馈按钮 -->
-          <van-icon name="cross" @click="show = true" />
+          <van-icon name="cross" @click="show1 = true" />
         </div>
       </template>
     </van-cell>
-    <van-action-sheet get-container="body" v-model="show" :actions="actions" @select="onSelect" />
+    <!-- 一级反馈面版 -->
+    <van-action-sheet
+      cancel-text="取消"
+      get-container="body"
+      v-model="show1"
+      :actions="actions1"
+      @select="onSelectFn"
+    />
+    <!-- 二级返回面版 -->
+    <van-action-sheet
+      cancel-text="返回"
+      get-container="body"
+      v-model="show2"
+      :actions="actions2"
+      @select="onSelectFn"
+      @cancel="onCancel"
+    />
   </div>
 </template>
 
 <script>
-import { Toast } from 'vant'
+// import { Toast } from 'vant'
+import { ACTION_SHEET_LEVEL1, ACTION_SHEET_LEVEL2 } from '@/constant'
+// 调用请求接口
+// import { articleDisLikeAPI } from '@/api/index.js'
 export default {
   props: {
     // 文章信息对象
@@ -47,16 +66,36 @@ export default {
   },
   data() {
     return {
-      show: false,
-      actions: [{ name: '选项一' }, { name: '选项二' }, { name: '选项三' }]
+      // 一级反馈面板的可见性
+      show1: false,
+      // 二级面板的可见性
+      show2: false,
+      // 一级反馈面板的数据
+      actions1: ACTION_SHEET_LEVEL1,
+      // 二级反馈面板的数据
+      actions2: ACTION_SHEET_LEVEL2
     }
   },
   methods: {
-    onSelect(item) {
-      // 默认情况下点击选项时不会自动收起
-      // 可以通过 close-on-click-action 属性开启自动收起
-      this.show = false
-      Toast(item.name)
+    onSelectFn(action) {
+      // console.log(action)
+      // action绑定的数据对象, index是索引
+      if (action.id === 22) {
+        // 证明点击的是反馈垃圾内容
+        this.show1 = false
+        this.show2 = true
+      } else if (action.id === 11) {
+        this.$emit('dislike', this.action)
+        this.show = false // 关闭弹窗
+        // await articleDisLikeAPI({
+        //   artId:this.artcleObj.art_id
+        // })
+      }
+    },
+    // 二级反馈的返回事件
+    onCancel() {
+      this.show1 = true
+      this.show2 = false
     }
   },
   created() {

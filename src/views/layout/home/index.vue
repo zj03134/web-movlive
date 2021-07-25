@@ -17,6 +17,14 @@
         <ArticleList :chnId="channelId"></ArticleList>
       </van-tab>
     </van-tabs>
+    <!-- 编辑频道图标 -->
+    <van-icon name="plus" size="0.37333334rem" class="moreChannels" @click="show = true" />
+
+    <!-- 弹出层组件 -->
+    <van-popup v-model="show" class="edit_wrap">
+      <!-- 弹出层的主体区域 -->
+      <ChanneEdit :userChannelList="channelList"></ChanneEdit>
+    </van-popup>
   </div>
 </template>
 
@@ -27,10 +35,12 @@ import logoPng from '@/assets/images/logo.png'
 import { userChaneListAPI } from '@/api/index.js'
 // 注册组件
 import ArticleList from './ArticleList'
+import ChanneEdit from './ChanneEdit'
 export default {
   // 注册子路由
   components: {
-    ArticleList
+    ArticleList,
+    ChanneEdit
   },
   // 调试的时候方便程序员代码的调试
   name: 'Home',
@@ -41,7 +51,8 @@ export default {
       // 频道数组
       channelList: [],
       // 记录当前激活频道的ID 默认是推荐
-      channelId: 0
+      channelId: 0,
+      show: false
     }
   },
   async created() {
@@ -61,5 +72,23 @@ export default {
 /* tab内容距离tab导航的距离 */
 /deep/ .van-tabs__content {
   padding-top: 44px;
+}
+// 设置 tabs 容器的样式
+/deep/ .van-tabs__wrap {
+  padding-right: 30px;
+  background-color: #fff;
+}
+
+// 设置小图标的样式
+.moreChannels {
+  position: fixed;
+  top: 62px;
+  right: 8px;
+  z-index: 999;
+}
+/* 频道编辑弹出层铺满屏幕 */
+.edit_wrap {
+  width: 100%;
+  height: 100%;
 }
 </style>

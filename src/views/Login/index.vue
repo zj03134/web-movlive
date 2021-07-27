@@ -37,7 +37,7 @@ export default {
     return {
       formLogin: {
         // 手机号
-        mobile: '17782604410',
+        mobile: '13888888888',
         // 默认只能用246810后台规定了
         code: '246810'
       }

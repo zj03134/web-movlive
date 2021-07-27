@@ -23,7 +23,13 @@
     <!-- 弹出层组件 -->
     <van-popup v-model="show" class="edit_wrap">
       <!-- 弹出层的主体区域 -->
-      <ChanneEdit :userChannelList="channelList"></ChanneEdit>
+      <ChanneEdit
+        @close="closeFn"
+        :userChannelList="channelList"
+        @add="addFn"
+        @remove="removeFn"
+        @changeChannel="channgeChannelFn"
+      ></ChanneEdit>
     </van-popup>
   </div>
 </template>
@@ -32,7 +38,7 @@
 // 图片的路径
 import logoPng from '@/assets/images/logo.png'
 // 获取到频道数据调用这个函数
-import { userChaneListAPI } from '@/api/index.js'
+import { userChaneListAPI, updateChannelListAPI } from '@/api/index.js'
 // 注册组件
 import ArticleList from './ArticleList'
 import ChanneEdit from './ChanneEdit'
@@ -60,6 +66,52 @@ export default {
     const res = await userChaneListAPI()
     // 把从后台获取的数据赋值给channelList数组，然后循环这个数组中的对象
     this.channelList = res.data.data.channels
+  },
+  methods: {
+    // 对象-加入到数组里
+    // async addFn(obj) {
+    //   this.channelList.push(obj)
+    //   this.editFn()
+    // },
+    // 弹层关闭-重置编辑频道状态
+    // 数据处理
+    async editFn(obj, index, type) {
+      // 编辑频道
+      if (type === 'add') {
+        this.channelList.push(obj)
+      }
+      const arr = this.channelList.filter(obj => {
+        return obj.id !== 0
+      }) // 先过滤掉id为0的推荐频道, 把剩余的数组返回
+      console.log(arr)
+
+      const resultList = arr.map((item, index) => {
+        const newObj = { ...item } // 浅拷贝(让对象和原数组脱离关系)
+        newObj.seq = index + 1
+        delete newObj.name // 删除对象里name键值对
+        return newObj
+      })
+      // map会收集每次遍历return的值形成一个新数组
+      console.log(resultList)
+      await updateChannelListAPI({
+        channels: resultList
+      })
+    },
+    // 删除用户频道id
+    removeFn(obj) {
+      const index = this.channelList.findIndex(item => item.id === obj.id)
+      this.channelList.splice(index, 1)
+      this.updateFn()
+    },
+    // 切换频道
+    channgeChannelFn(obj) {
+      this.channelId = obj.id // 传过来的频道ID, 影响tabs默认v-model的选择
+    },
+    // 关闭弹出层
+    closeFn() {
+      // 设置为false
+      this.show = false
+    }
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <!-- 弹出层的头部区域 -->
     <van-nav-bar title="频道管理">
       <template #right>
-        <van-icon name="cross" size="0.37333334rem" color="white" />
+        <van-icon name="cross" size="0.37333334rem" color="white" @click="onHide" />
       </template>
     </van-nav-bar>
     <!-- 我的频道 -->
@@ -11,50 +11,17 @@
       <div class="channel-title">
         <span
           >我的频道
-          <span class="small-title"> 点击进入频道 </span>
+          <span class="small-title"> 点击{{ isEdit ? '删除' : '进入' }}频道 </span>
         </span>
-        <span>编辑</span>
+        <span @click="editFn">{{ isEdit ? '完成' : '编辑' }}</span>
       </div>
       <!-- 我的频道列表 -->
       <van-row type="flex">
-        <van-col span="6" v-for="obj in userChannelList" :key="obj.id">
+        <van-col span="6" v-for="obj in userChannelList" :key="obj.id" @click="removeFn(obj)">
           <div class="channel-item van-hairline--surround">
             {{ obj.name }}
             <!-- 删除的徽标 -->
-            <van-badge color="transparent" class="cross-badge">
-              <template #content>
-                <van-icon name="cross" class="badge-icon" color="#cfcfcf" size="0.32rem" />
-              </template>
-            </van-badge>
-          </div>
-        </van-col>
-        <van-col span="6">
-          <div class="channel-item van-hairline--surround">
-            名字
-            <!-- 删除的徽标 -->
-            <van-badge color="transparent" class="cross-badge">
-              <template #content>
-                <van-icon name="cross" class="badge-icon" color="#cfcfcf" size="0.32rem" />
-              </template>
-            </van-badge>
-          </div>
-        </van-col>
-        <van-col span="6">
-          <div class="channel-item van-hairline--surround">
-            名字
-            <!-- 删除的徽标 -->
-            <van-badge color="transparent" class="cross-badge">
-              <template #content>
-                <van-icon name="cross" class="badge-icon" color="#cfcfcf" size="0.32rem" />
-              </template>
-            </van-badge>
-          </div>
-        </van-col>
-        <van-col span="6">
-          <div class="channel-item van-hairline--surround">
-            名字
-            <!-- 删除的徽标 -->
-            <van-badge color="transparent" class="cross-badge">
+            <van-badge color="transparent" class="cross-badge" v-show="isEdit && obj.name !== '推荐'">
               <template #content>
                 <van-icon name="cross" class="badge-icon" color="#cfcfcf" size="0.32rem" />
               </template>
@@ -71,7 +38,7 @@
       </div>
       <!-- 更多频道列表 -->
       <van-row type="flex">
-        <van-col span="6" v-for="obj in unChannelList" :key="obj.id">
+        <van-col span="6" v-for="obj in unChannelList" :key="obj.id" @click="moreFn(obj)">
           <div class="channel-item van-hairline--surround">{{ obj.name }}</div>
         </van-col>
       </van-row>
@@ -83,11 +50,42 @@
 import { allChannelListAPI } from '@/api/index.js'
 export default {
   props: {
-    userChannelList: Array // 用户已选的
+    // 用户已选的
+    userChannelList: Array
   },
   data() {
     return {
-      allChannelList: [] // 所有频道
+      // 所有频道
+      allChannelList: [],
+      isEdit: false
+    }
+  },
+  methods: {
+    // 点击编辑的时候让小叉号显示
+    editFn() {
+      // console.log(123)
+      this.isEdit = !this.isEdit
+    },
+    // 关闭
+    onHide() {
+      this.isEdit = false
+    },
+    // 更多频道点击事件
+    moreFn(thisObj) {
+      // 判断只有在编辑状态下在，才可以添加 thisObj是传过来的对象
+      if (this.isEdit) {
+        this.$emit('add', thisObj)
+        // 把当前用户已选的频道数组传给后台
+      }
+    },
+    // 删除频道/进入频道
+    removeFn(theObj) {
+      if (this.isEdit && theObj.name !== '推荐') {
+        this.$emit('remove', theObj)
+      } else if (this.isEdit === false) {
+        this.$emit('changeChannel', theObj)
+        this.$emit('close') // 关闭弹窗
+      }
     }
   },
   computed: {

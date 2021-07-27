@@ -45,10 +45,23 @@ const allChannelListAPI = () => {
     url: '/v1_0/channels'
   })
 }
+// 频道 - 更新已选
+const updateChannelAPI = ({
+  channels
+}) => {
+  return request({
+    url: '/v1_0/user/channels',
+    method: 'PUT',
+    data: {
+      channels: channels
+    }
+  })
+}
 // 按需导出
 export {
+  allChannelListAPI,
   userChaneListAPI,
   articleListAPI,
   articleDisLikeAPI,
-  allChannelListAPI
+  updateChannelAPI
 }

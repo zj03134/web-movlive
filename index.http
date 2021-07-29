@@ -1,0 +1,6 @@
+POST http://toutiao.itheima.net/v1_0/comments
+Content-Type: application/json
+Authorization: Bearer 4a1dc32d-bee1-4000-9d7a-db27ab0ef4f6
+
+
+{"target":"7953","content":"我真是太难了"}

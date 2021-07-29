@@ -7,7 +7,7 @@
         <img class="logo" :src="imgObj" />
       </template>
       <template #right>
-        <van-icon name="search" size="0.48rem" color="#fff" />
+        <van-icon name="search" size="0.48rem" color="#fff" @click="$router.push('/search')" />
       </template>
     </van-nav-bar>
     <!-- 频道导航 -->
@@ -26,7 +26,7 @@
       <ChanneEdit
         @close="closeFn"
         :userChannelList="channelList"
-        @add="addFn"
+        @add="editFn"
         @remove="removeFn"
         @changeChannel="channgeChannelFn"
       ></ChanneEdit>
@@ -38,7 +38,7 @@
 // 图片的路径
 import logoPng from '@/assets/images/logo.png'
 // 获取到频道数据调用这个函数
-import { userChaneListAPI, updateChannelListAPI } from '@/api/index.js'
+import { userChaneListAPI, updateChannelAPI } from '@/api/index.js'
 // 注册组件
 import ArticleList from './ArticleList'
 import ChanneEdit from './ChanneEdit'
@@ -93,7 +93,7 @@ export default {
       })
       // map会收集每次遍历return的值形成一个新数组
       console.log(resultList)
-      await updateChannelListAPI({
+      await updateChannelAPI({
         channels: resultList
       })
     },

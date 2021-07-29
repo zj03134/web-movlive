@@ -4,14 +4,20 @@
     <van-pull-refresh v-model="isLoading" @refresh="pullDownRefreshFn">
       <!-- 底部加载更多 -->
       <van-list v-model="loading" :finished="down" finished-text="没有更多了" @load="onLoad">
-        <Articleltem v-for="item in articleList" :key="item.art_id" :obj="item" @dislike="dislikeFn"></Articleltem>
+        <Articleltem
+          v-for="item in articleList"
+          @click="clickFn(item.art_id)"
+          :key="item.art_id"
+          :obj="item"
+          @dislike="dislikeFn"
+        ></Articleltem>
       </van-list>
     </van-pull-refresh>
   </div>
 </template>
 
 <script>
-import Articleltem from './components/ArticleItem'
+import Articleltem from '@/components/ArticleItem.vue'
 import { articleListAPI, articleDisLikeAPI } from '@/api/index.js'
 // 导入时间格式化后的js文件
 import { timeAgo } from '@/utils/data.js'
@@ -105,6 +111,10 @@ export default {
       } catch (err) {
         Notify({ type: 'warning', message: '反馈失败-联系程序员' })
       }
+    },
+    // 点击跳转到详情页面
+    clickFn(aid) {
+      this.$router.push(`/article/${aid}`)
     }
   },
   components: {

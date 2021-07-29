@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 // 导入移动端适配的库，只需要执行即可
 import 'amfe-flexible'
-
+import '@/utils/directives.js'
 // Vant组件库
 import {
   NavBar,
@@ -26,8 +26,13 @@ import {
   Popup,
   Col,
   Row,
-  Badge
+  Badge,
+  Search,
+  Divider
 } from 'vant'
+
+Vue.use(Divider)
+Vue.use(Search)
 Vue.use(Col)
 Vue.use(Badge)
 Vue.use(Row)

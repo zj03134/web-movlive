@@ -39,15 +39,30 @@
 └── src	# 源码
     ├── api	#请求接口封装模块
     	└── index.js #封装请求方法
+    	└── article.js #文章详情类的请求方法
+    	└── comment.js #评论类的请求方法
+    	└── login.js #登录的请求方法
+    	└── Search.js #搜索的请求方法
     ├── assets	#资源目录
     ├── components	#组件目录
+    	└── ArticleItem.vue #文章列表的组件
+    ├── constant#常量目录
     ├── router	#路由模块
     	└── index.js #路由对象
     ├── store	#Vuex容器模块
     	└── index.js #store对象
     ├── styles #样式目录
     ├── utils  #工具模块目录
+    	└── data.js #日期处理对象
+    	└── diective.js #输入框自动聚焦功能对象
+    	└── Notify.js #UI层弹窗封装
+    	└── request.js #这是axios的二次封装和请求拦截器
+    	└── storoge.js #这里是本地存储的方式的对象
+    	└── str.js #这里是校验规则的存储地址
     ├── views  #视图组件目录
+    	└── Login #这个文件夹是登录页面的文件夹
+    	└── Layout #这个文件夹是主页页面的文件夹
+    	└── Search#这个文件夹是搜索页面的文件夹
     ├── App.vue	#根组件
     └── main.js	#入口文件
 ├── .browserslistrc # 浏览器的约定
